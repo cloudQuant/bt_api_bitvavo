@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${ github.workflow }-${ github.ref }
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -23,11 +23,12 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - name: Install
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e . 2>/dev/null || pip install -e .
-          pip install ruff mypy pytest
+          pip install bt_api_base ruff mypy pytest
+      - name: Install package
+        run: pip install -e .
       - name: Ruff lint
         run: ruff check src/ --output-format=github
       - name: Ruff format
@@ -36,25 +37,32 @@ jobs:
         run: mypy src/ --ignore-missing-imports || true
 
   test:
-    name: Test
-    runs-on: ${ matrix.os }
+    name: Test (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     needs: quality
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            src
+            tests
+            pyproject.toml
       - uses: actions/setup-python@v5
         with:
-          python-version: ${ matrix.python-version }
+          python-version: ${{ matrix.python-version }}
           cache: pip
-      - name: Install
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e . 2>/dev/null || pip install -e .
+          pip install bt_api_base
+      - name: Install package
+        run: pip install -e .
       - name: Test
         run: pytest tests/ -v --tb=short || true
 
@@ -64,6 +72,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            src
+            pyproject.toml
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -81,14 +93,20 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            src
+            pyproject.toml
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Publish
+      - name: Build
         run: |
+          python -m pip install --upgrade pip
           pip install build twine
           python -m build
-          twine upload dist/*
+      - name: Publish to PyPI
+        run: twine upload dist/*
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${ secrets.PYPI_TOKEN }
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}

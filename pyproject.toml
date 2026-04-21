@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "bt_api_bitvavo"
@@ -34,6 +34,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Office/Business :: Financial :: Investment",
 ]
 dependencies = ["bt_api_base>=0.15.0"]
@@ -42,23 +43,36 @@ dependencies = ["bt_api_base>=0.15.0"]
 dev = ["pytest>=7.0", "ruff>=0.1.0"]
 all = ["bt_api_bitvavo[dev]"]
 
-[project.urls]
-Homepage = "https://github.com/cloudQuant/bt_api_bitvavo"
-Documentation = "https://bt-api-bitvavo.readthedocs.io/"
-Repository = "https://github.com/cloudQuant/bt_api_bitvavo"
-Issues = "https://github.com/cloudQuant/bt_api_bitvavo/issues"
-Changelog = "https://github.com/cloudQuant/bt_api_bitvavo/releases"
+[project.entry-points."bt_api.plugins"]
+bitvavo = "bt_api_bitvavo.plugin:register_plugin"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/bt_api_bitvavo"]
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+bt_api_bitvavo = ["configs/*.yaml"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py39"
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    "*.egg-info",
+    ".venv",
+    "venv",
+    "*.bak",
+]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP"]
-ignore = ["E501"]
+select = ["E", "W", "F", "I", "N", "UP", "B", "C4", "SIM", "TCH", "RUF100", "S", "PERF", "PIE790"]
+ignore = ["E501", "B008", "N802", "N803", "S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,5 +1,6 @@
 from bt_api_base.balance_utils import simple_balance_handler
 from bt_api_base.registry import ExchangeRegistry
+
 from bt_api_bitvavo.exchange_data import BitvavoExchangeDataSpot
 from bt_api_bitvavo.feeds.live_bitvavo.spot import BitvavoRequestDataSpot
 

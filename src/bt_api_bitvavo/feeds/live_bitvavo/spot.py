@@ -1,5 +1,7 @@
-from typing import Any, Optional
+from typing import Any
+
 from bt_api_base.feeds.capability import Capability
+
 from bt_api_bitvavo.feeds.live_bitvavo.request_base import BitvavoRequestData
 
 

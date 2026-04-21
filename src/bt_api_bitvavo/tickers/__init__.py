@@ -1,7 +1,9 @@
 import json
 import time
 from typing import Any
+
 from bt_api_base.containers.tickers.ticker import TickerData
+
 from bt_api_bitvavo.tickers.ticker_utils import parse_float
 
 

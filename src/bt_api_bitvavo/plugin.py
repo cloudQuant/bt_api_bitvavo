@@ -1,6 +1,5 @@
 from bt_api_base.plugins.protocol import PluginInfo
 
-
 PLUGIN_INFO = PluginInfo(
     name="bt_api_bitvavo",
     version="0.1.0",
