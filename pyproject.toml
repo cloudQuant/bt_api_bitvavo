@@ -5,13 +5,63 @@ build-backend = "hatchling.build"
 [project]
 name = "bt_api_bitvavo"
 version = "0.1.0"
-description = "Bitvavo exchange plugin for bt_api"
+description = "Bitvavo exchange plugin for bt_api - European crypto exchange"
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = ["bt_api_base>=0.1.0"]
+license = { text = "MIT" }
+authors = [
+    { name = "cloudQuant", email = "yunjinqi@gmail.com" }
+]
+keywords = [
+    "bt_api",
+    "bitvavo",
+    "cryptocurrency",
+    "exchange",
+    "trading",
+    "api",
+    "crypto",
+    "bitcoin",
+    "ethereum"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = ["bt_api_base>=0.15.0"]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff"]
+dev = ["pytest>=7.0", "ruff>=0.1.0"]
+all = ["bt_api_bitvavo[dev]"]
+
+[project.urls]
+Homepage = "https://github.com/cloudQuant/bt_api_bitvavo"
+Documentation = "https://bt-api-bitvavo.readthedocs.io/"
+Repository = "https://github.com/cloudQuant/bt_api_bitvavo"
+Issues = "https://github.com/cloudQuant/bt_api_bitvavo/issues"
+Changelog = "https://github.com/cloudQuant/bt_api_bitvavo/releases"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bt_api_bitvavo"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
