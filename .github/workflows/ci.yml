@@ -63,7 +63,7 @@ jobs:
           pip install bt_api_base pytest
       - name: Install package
         run: pip install -e .
-      - name: Test
+        run: pip install -e . && pip install pytest
         run: python -m pytest tests/ -v --tb=short || true
 
   build:
