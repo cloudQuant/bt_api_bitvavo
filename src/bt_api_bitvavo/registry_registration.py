@@ -5,10 +5,9 @@ from bt_api_bitvavo.exchange_data import BitvavoExchangeDataSpot
 from bt_api_bitvavo.feeds.live_bitvavo.spot import BitvavoRequestDataSpot
 
 
-def register_bitvavo():
-    ExchangeRegistry.register_feed("BITVAVO___SPOT", BitvavoRequestDataSpot)
-    ExchangeRegistry.register_exchange_data("BITVAVO___SPOT", BitvavoExchangeDataSpot)
-    ExchangeRegistry.register_balance_handler("BITVAVO___SPOT", simple_balance_handler)
-
-
-register_bitvavo()
+def register_bitvavo(
+    registry: ExchangeRegistry | type[ExchangeRegistry] = ExchangeRegistry,
+) -> None:
+    registry.register_feed("BITVAVO___SPOT", BitvavoRequestDataSpot)
+    registry.register_exchange_data("BITVAVO___SPOT", BitvavoExchangeDataSpot)
+    registry.register_balance_handler("BITVAVO___SPOT", simple_balance_handler)
